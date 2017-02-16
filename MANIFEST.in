@@ -1,0 +1,2 @@
+graft incubator/templates
+graft incubator/static

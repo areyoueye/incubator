@@ -1,0 +1,7 @@
+*.db
+*.pyc
+__pycache__
+incubator.egg-info/
+incubator.egg-info/*
+incubator/__init__.py
+tmp
