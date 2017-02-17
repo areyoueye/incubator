@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block container %}
+<script  type="text/javascript"src="https://code.highcharts.com/highcharts.js"></script>
+<script  type="text/javascript"src="https://code.highcharts.com/modules/exporting.js"></script>
+
+<script>
+var readings = {{ readings|safe }};
+readings = readings.reverse();
+</script>
+<div id="chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<script type="text/javascript">
+$(function () {
+    Highcharts.chart('chart', {
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: "Temperature and Humidity Readings"
+        },
+        subtitle: {
+            text: 'subtitle'
+        },
+        xAxis: {
+            categories: readings.map(function(x) { return x['date']; })
+        },
+        yAxis: [{
+	    labels: {
+	    	format: "{value}°F"
+	    },
+            title: {
+                text: "Temperature"
+            }
+        }/*,{
+	    labels: {
+	    	format: "{value} %RH"
+	    },
+            title: {
+                text: "Humidity"
+            },
+	    opposite: true
+	} */],
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true
+            }
+        },
+        series: [
+	    {
+            name: "Temperature",
+            data: readings.map(function(x) { return x['temperature']; })
+            }/*, {
+            name: "Humidity",
+            data: readings.map(function(x) { return x['humidity']; })
+	    }*/
+	]
+    });
+});
+</script>
+
+<h2>Readings</h2>
+  <table class="table table-striped table-condensed">
+  <thead>
+    <th>Date</th>
+    <th>Temperature</th>
+    <th>Humidity</th>
+  </thead>
+  <tbody>
+  {% for reading in readings %}
+    <tr>
+      <td>{{ reading.date }}</td>
+      <td>{{ reading.temperature }}</td>
+      <td>{{ reading.humidity }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+  </table>
+{% endblock %}
