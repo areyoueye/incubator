@@ -13,17 +13,18 @@ readings = readings.reverse();
 $(function () {
     Highcharts.chart('chart', {
         chart: {
-            type: 'line'
+            zoomType: 'xy'
         },
         title: {
             text: "Temperature and Humidity Readings"
         },
         subtitle: {
-            text: 'subtitle'
+            text: 'Source: The incubator in my office'
         },
-        xAxis: {
-            categories: readings.map(function(x) { return x['date']; })
-        },
+        xAxis: [{
+            categories: readings.map(function(x) { return x['date']; }),
+	    crosshair: true
+	}],
         yAxis: [{
 	    labels: {
 	    	format: "{value}°F"
@@ -31,7 +32,8 @@ $(function () {
             title: {
                 text: "Temperature"
             }
-        }/*,{
+        },{
+	    gridlinewidth: 0,
 	    labels: {
 	    	format: "{value} %RH"
 	    },
@@ -39,7 +41,8 @@ $(function () {
                 text: "Humidity"
             },
 	    opposite: true
-	} */],
+	}],
+	/*
         plotOptions: {
             line: {
                 dataLabels: {
@@ -48,14 +51,24 @@ $(function () {
                 enableMouseTracking: true
             }
         },
+	*/
         series: [
 	    {
             name: "Temperature",
+	    type: 'spline',
+	    tooltip: {
+	    	valueSuffix: '°F'
+	    },
             data: readings.map(function(x) { return x['temperature']; })
-            }/*, {
+            }, {
             name: "Humidity",
+	    type: 'spline',
+	    yAxis: 1,
+	    tooltip: {
+	    	valueSuffix: '%RH'
+	    },
             data: readings.map(function(x) { return x['humidity']; })
-	    }*/
+	    }
 	]
     });
 });
